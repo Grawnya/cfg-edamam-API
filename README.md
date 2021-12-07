@@ -1,2 +1,2 @@
 # cfg-edamam-API
-Project Code for Code First Girls Career Chaneger Python Course
+Project Code for Code First Girls Career Changer Python Course
