@@ -6,13 +6,34 @@ def basic_recipe_search(ingredient):
     app_id = 'ca261162'
     app_key = '8db2cb0cfee4703dc5b1f2520808fbae'
     time = input('Desired cooking time range in minutes in form (min)-(max): ')
-    result = requests.get( # extended link commented out whichc includes other important search criteria - can be added by strin concatenation if box filled in GUI
+    result = requests.get( # extended link commented out which includes other important search criteria - can be added by strin concatenation if box filled in GUI
         f'https://api.edamam.com/api/recipes/v2?type=public&q={ingredient}&app_id={app_id}&app_key={app_key}'#&diet=low-sodium&cuisineType=Italian&mealType=Lunch&calories=200-400&time={time}&excluded=chocolate&random=false&nutrients%5BENERC_KCAL%5D=500-700'
     )
     data = result.json() # returns in JSON format
     return data['hits'] # obtain list of all recipes that fit criteria
 
-# function 
+
+# function to search the specific details of a particular recipe
+def specific_recipe(dict_of_recipes):
+    recipe_name = input('\nWhat recipe is of most interest? ')
+    recipe_name = recipe_name.lower() # format to lower case and then use 'title' to capitalise each word to format the section headings
+    recipe_name = recipe_name.title()
+    if recipe_name not in dict_of_recipes: # if the name isn't valid, prompt the user again
+        recipe_name = input('\nName not valid. What recipe is of most interest? ')
+        recipe_name = recipe_name.lower()
+        recipe_name = recipe_name.title()
+    code = dict_of_recipes[recipe_name]
+    app_id = 'ca261162'
+    app_key = '8db2cb0cfee4703dc5b1f2520808fbae'
+    result = requests.get(
+        f'https://api.edamam.com/api/recipes/v2/{code}?type=public&app_id={app_id}&app_key={app_key}'
+    )
+    data = result.json()
+    more_details = data['recipe']
+    return recipe_name, more_details # return both the name and the data (essentially a dictionary) as they are both useful for the rest of the code
+
+
+# function to print all the recipe details to the console/terminal
 def print_item_to_console(list_of_details, specific_item, sort=False):
     if sort == True: # criteria to sort ingredients, without creating a new function - can ignore argument if not sorted
         list_of_elements = sorted(list_of_details[specific_item]) 
@@ -27,6 +48,7 @@ def print_item_to_console(list_of_details, specific_item, sort=False):
     else:
         for each in list_of_elements: # loop through all lists and print each element
             print(each)
+
 
 # function to format the document - similar to printing to console formatting, but just additional function 
 # as both printing to a doc and console don't need to occur
@@ -61,23 +83,10 @@ def run():
         print(name) # print name onto console
     return details # return the dictionary
 
+
 # function to print the specific recipe to console/terminal
 def specific_recipe_to_console(dict_of_recipes):
-    recipe_name = input('\nWhat recipe is of most interest? ') # read in specific recipe
-    recipe_name = recipe_name.lower() # format it by making it lower case and then capitalising each word
-    recipe_name = recipe_name.title()
-    if recipe_name not in dict_of_recipes: # To catch out any misspelt words
-        recipe_name = input('\nName not valid. What recipe is of most interest? ')
-        recipe_name = recipe_name.lower()
-        recipe_name = recipe_name.title()
-    app_id = 'ca261162'
-    app_key = '8db2cb0cfee4703dc5b1f2520808fbae'
-    code = dict_of_recipes[recipe_name]
-    result = requests.get(
-        f'https://api.edamam.com/api/recipes/v2/{code}?type=public&app_id={app_id}&app_key={app_key}' # speciifc recipe link
-    )
-    data = result.json()
-    more_details = data['recipe']
+    recipe_name, more_details = specific_recipe(dict_of_recipes)
     print(f'{recipe_name}\n')
 
     # print cuisine type
@@ -103,24 +112,11 @@ def specific_recipe_to_console(dict_of_recipes):
     # print diet details  
     print_item_to_console(more_details, 'dietLabels')
 
+
 # function to write the recipe to a text file - similar explanations to 'specific_recipe_to_console' function above
 def write_to_file(dict_of_recipes):
-    recipe_name = input('\nWhat recipe is of most interest? ')
-    recipe_name = recipe_name.lower()
-    recipe_name = recipe_name.title()
-    if recipe_name not in dict_of_recipes:
-        recipe_name = input('\nName not valid. What recipe is of most interest? ')
-        recipe_name = recipe_name.lower()
-        recipe_name = recipe_name.title()
-    code = dict_of_recipes[recipe_name]
-    app_id = 'ca261162'
-    app_key = '8db2cb0cfee4703dc5b1f2520808fbae'
-    result = requests.get(
-        f'https://api.edamam.com/api/recipes/v2/{code}?type=public&app_id={app_id}&app_key={app_key}'
-    )
-    data = result.json()
+    recipe_name, more_details = specific_recipe(dict_of_recipes)
     lines = []
-    more_details = data['recipe']
     lines.append(f'{recipe_name}\n')
 
     # print cuisine type
@@ -152,7 +148,9 @@ def write_to_file(dict_of_recipes):
         textfile.write(element)
     textfile.close()
 
+
 # comment out 'specific_recipe_to_console' or 'write_to_file' based on what you want to happen
 recipes = run()
 specific_recipe_to_console(recipes)
 # write_to_file(recipes)
+
