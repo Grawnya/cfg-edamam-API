@@ -7,8 +7,9 @@ def basic_recipe_search(ingredient):
     app_key = '8db2cb0cfee4703dc5b1f2520808fbae'
     time = input('Desired cooking time range in minutes in form (min)-(max): ')
     cuisine_type = input('What type of cuisine do you want to look for? ')
+    health_label = input('What are your dietary requirements? ')
     result = requests.get( # extended link commented out which includes other important search criteria - can be added by strin concatenation if box filled in GUI
-        f'https://api.edamam.com/api/recipes/v2?type=public&q={ingredient}&app_id={app_id}&app_key={app_key}&time={time}&cuisineType={cuisine_type}'#&diet=low-sodium&cuisineType=Italian&mealType=Lunch&calories=200-400&time={time}&excluded=chocolate&random=false&nutrients%5BENERC_KCAL%5D=500-700'
+        f'https://api.edamam.com/api/recipes/v2?type=public&q={ingredient}&app_id={app_id}&app_key={app_key}&time={time}&cuisineType={cuisine_type}&health={health_label}'
     )
     data = result.json() # returns in JSON format
     return data['hits'] # obtain list of all recipes that fit criteria
