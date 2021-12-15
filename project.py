@@ -8,7 +8,7 @@ def basic_recipe_search(ingredient):
     time = input('Desired cooking time range in minutes in form (min)-(max): ')
     cuisine_type = input('What type of cuisine do you want to look for? ')
     health_label = input('What are your dietary requirements? ')
-    result = requests.get( # extended link commented out which includes other important search criteria - can be added by strin concatenation if box filled in GUI
+    result = requests.get( # extended link commented out which includes other important search criteria - can be added by string concatenation if box filled in GUI
         f'https://api.edamam.com/api/recipes/v2?type=public&q={ingredient}&app_id={app_id}&app_key={app_key}&time={time}&cuisineType={cuisine_type}&health={health_label}'
     )
     data = result.json() # returns in JSON format
