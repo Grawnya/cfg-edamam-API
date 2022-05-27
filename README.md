@@ -1,4 +1,6 @@
 # cfg-edamam-API
+Recipe App utilising the edamam API V2
+
 Project Code for Code First Girls' "Introduction to Python" Course
 
 project.py consists of the code used to call on a specific recipe from the Edamam API based on dietary criteria
