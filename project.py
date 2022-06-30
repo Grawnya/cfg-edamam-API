@@ -16,8 +16,8 @@ def run():
 
 # function to access the API with basic criteria
 def basic_recipe_search(ingredient):  
-    app_id = 'ca261162'
-    app_key = '8db2cb0cfee4703dc5b1f2520808fbae'
+    app_id = 'redacted'
+    app_key = 'redacted'
     time = input('Desired cooking time range in minutes in form (min)-(max): ')
     cuisine_type = input('What type of cuisine do you want to look for? ')
     health_label = input('What are your dietary requirements? ')
